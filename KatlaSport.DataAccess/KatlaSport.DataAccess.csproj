@@ -69,6 +69,14 @@
     <Compile Include="Migrations\201901150652026_AddCategoryDescription.Designer.cs">
       <DependentUpon>201901150652026_AddCategoryDescription.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901151413565_AddProductDescriptionManCodePrice.cs" />
+    <Compile Include="Migrations\201901151413565_AddProductDescriptionManCodePrice.Designer.cs">
+      <DependentUpon>201901151413565_AddProductDescriptionManCodePrice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901151455376_SeedDatabaseWithManCodeAndPrice.cs" />
+    <Compile Include="Migrations\201901151455376_SeedDatabaseWithManCodeAndPrice.Designer.cs">
+      <DependentUpon>201901151455376_SeedDatabaseWithManCodeAndPrice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +92,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901150652026_AddCategoryDescription.resx">
       <DependentUpon>201901150652026_AddCategoryDescription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901151413565_AddProductDescriptionManCodePrice.resx">
+      <DependentUpon>201901151413565_AddProductDescriptionManCodePrice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901151455376_SeedDatabaseWithManCodeAndPrice.resx">
+      <DependentUpon>201901151455376_SeedDatabaseWithManCodeAndPrice.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
