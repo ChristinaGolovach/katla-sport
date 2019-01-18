@@ -42,7 +42,7 @@ namespace KatlaSport.DataAccess
             return Extensions.CountAsync(source);
         }
 
-        public static Task<T> FirstOrDefaultAsync<T>(this IQueryable<T> source, Expression<Func<T, bool>> predicate)
+        public static async Task<T> FirstOrDefaultAsync<T>(this IQueryable<T> source, Expression<Func<T, bool>> predicate)
             where T : class
         {
             if (predicate == null)
@@ -55,7 +55,9 @@ namespace KatlaSport.DataAccess
                 source = (source as EntitySet<T>).DbSet;
             }
 
-            return Extensions.FirstOrDefaultAsync(source, predicate);
+            T result = await Extensions.FirstOrDefaultAsync(source, predicate).ConfigureAwait(continueOnCapturedContext: false);
+
+            return result;
         }
     }
 }

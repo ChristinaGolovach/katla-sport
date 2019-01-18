@@ -120,7 +120,7 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task SetStatusAsync(int hiveId, bool deletedStatus)
         {
-            var dbHive = await _context.Hives.FirstOrDefaultAsync(h => h.Id == hiveId);
+            var dbHive = await _context.Hives.FirstOrDefaultAsync(h => h.Id == hiveId).ConfigureAwait(continueOnCapturedContext: false);
 
             if (dbHive == null)
             {
