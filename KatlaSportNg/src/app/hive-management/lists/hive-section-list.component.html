@@ -13,6 +13,14 @@
         <th scope="row">{{hiveSection.name}}</th>
         <td>
           <span class="btn-toolbar"role="toolbar" aria-label="Hive section action buttons" style="display: block; white-space:nowrap;">
+              <div class="btn-group mr-2" role="group" aria-label="Delete group" *ngIf="!hiveSection.isDeleted; else unDeleted">
+                  <button type="button" class="btn btn-danger" (click)="onDelete(hiveSection.id)">Delete</button>
+                </div>
+                <ng-template #unDeleted>
+                    <div class="btn-group mr-2" role="group" aria-label="UnDelete group" (click)="onUnDelete(hiveSection.id)">
+                      <button type="button" class="btn btn-danger">UnDelete</button>
+                    </div>
+                </ng-template>
               <div class="btn-group" role="group" aria-label="Edit group">
                 <button routerLink="/section/{{hiveSection.id}}" type="button" class="btn btn-primary">Edit</button>
               </div>
