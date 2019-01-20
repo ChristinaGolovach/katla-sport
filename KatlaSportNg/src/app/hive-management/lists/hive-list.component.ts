@@ -32,6 +32,6 @@ export class HiveListComponent implements OnInit {
   private setStatus(hiveId: number, isDeleted: boolean){
     var hive = this.hives.find(h => h.id == hiveId);
     //if (hive == null) ask - whether we should send a request to the server
-    this.hiveService.setHiveStatus(hiveId, isDeleted).subscribe(c => hive.isDeleted = isDeleted);
+    this.hiveService.setHiveStatus(hiveId, isDeleted).subscribe(() => hive.isDeleted = isDeleted, () => alert("Sorry, error was occured. Try later."));
   }
 }
