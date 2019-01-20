@@ -38,6 +38,6 @@ export class HiveSectionListComponent implements OnInit {
 
   private setStatus(hiveSectionId: number, isDeleted: boolean){
     var hiveSection = this.hiveSections.find(s => s.id == hiveSectionId);
-    this.hiveSectionService.setHiveSectionStatus(hiveSectionId, isDeleted).subscribe(c => hiveSection.isDeleted = isDeleted);
+    this.hiveSectionService.setHiveSectionStatus(hiveSectionId, isDeleted).subscribe(() => hiveSection.isDeleted = isDeleted, () => alert ("Sorry, error was occured. Try later."));
   }
 }
