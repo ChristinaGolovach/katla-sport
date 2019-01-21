@@ -12,9 +12,9 @@ namespace KatlaSport.Services.HiveManagement
         /// </summary>
         public UpdateHiveRequestValidator()
         {
-            RuleFor(r => r.Name).Length(4, 60);
-            RuleFor(r => r.Code).Length(5);
-            RuleFor(r => r.Address).Length(0, 300);
+            RuleFor(r => r.Name).NotNull().Length(4, 60);
+            RuleFor(r => r.Code).NotNull().Length(5);
+            RuleFor(r => r.Address).NotNull().Length(0, 300);
         }
     }
 }
