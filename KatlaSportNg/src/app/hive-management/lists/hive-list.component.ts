@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HiveListItem } from '../models/hive-list-item';
 import { HiveService } from '../services/hive.service';
+import { ErrorHandlerService } from '../services/error-handler.service';
 
 @Component({
   selector: 'app-hive-list',
@@ -11,7 +12,9 @@ export class HiveListComponent implements OnInit {
 
   hives: HiveListItem[];
 
-  constructor(private hiveService: HiveService) { }
+  constructor(
+    private hiveService: HiveService,
+    private errorService : ErrorHandlerService) { }
 
   ngOnInit() {
     this.getHives();
@@ -31,7 +34,9 @@ export class HiveListComponent implements OnInit {
 
   private setStatus(hiveId: number, isDeleted: boolean){
     var hive = this.hives.find(h => h.id == hiveId);
+
     //if (hive == null) ask - whether we should send a request to the server
-    this.hiveService.setHiveStatus(hiveId, isDeleted).subscribe(() => hive.isDeleted = isDeleted, () => alert("Sorry, error was occured. Try later."));
+    this.hiveService.setHiveStatus(hiveId, isDeleted)
+                    .subscribe(() => hive.isDeleted = isDeleted, error => alert(this.errorService.handleError(error)));
   }
 }

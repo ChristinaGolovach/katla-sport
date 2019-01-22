@@ -19,6 +19,7 @@ import { ProductCategoryProductListComponent } from 'app/product-management/list
 import { ProductListComponent } from 'app/product-management/lists/product-list.component';
 import { ProductCategoryService } from 'app/product-management/services/product-category.service';
 import { ProductService } from 'app/product-management/services/product.service';
+import { ErrorHandlerService } from './hive-management/services/error-handler.service';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ProductService } from 'app/product-management/services/product.service'
     ProductCategoryService,
     HiveService,
     HiveSectionService,
+    ErrorHandlerService
   ],
   bootstrap: [AppComponent]
 })
