@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using KatlaSport.DataAccess;
@@ -53,11 +54,7 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task<Hive> CreateHiveAsync(UpdateHiveRequest createRequest)
         {
-            var dbHiveWithDuplicateCode = await _context.Hives.FirstOrDefaultAsync(h => h.Code == createRequest.Code).ConfigureAwait(false);
-            if (dbHiveWithDuplicateCode != null)
-            {
-                throw new RequestedResourceHasConflictException($"The hive with code {createRequest.Code} already exists.");
-            }
+            await CheckExistingHiveCode(createRequest.Code, h => h.Code == createRequest.Code).ConfigureAwait(false);
 
             var dbHive = Mapper.Map<UpdateHiveRequest, DbHive>(createRequest);
             dbHive.CreatedBy = _userContext.UserId;
@@ -74,12 +71,7 @@ namespace KatlaSport.Services.HiveManagement
         {
             var dbHive = await GetExistingHive(hiveId).ConfigureAwait(false);
 
-            var dbHiveWithDuplicateCode = await _context.Hives.FirstOrDefaultAsync(h => h.Code == updateRequest.Code && h.Id != hiveId).ConfigureAwait(false);
-
-            if (dbHiveWithDuplicateCode != null)
-            {
-                throw new RequestedResourceHasConflictException($"The hive with code {updateRequest.Code} already exists.");
-            }
+            await CheckExistingHiveCode(updateRequest.Code, h => h.Code == updateRequest.Code && h.Id != hiveId).ConfigureAwait(false);
 
             Mapper.Map(updateRequest, dbHive);
             dbHive.LastUpdatedBy = _userContext.UserId;
@@ -127,6 +119,16 @@ namespace KatlaSport.Services.HiveManagement
             }
 
             return dbHive;
+        }
+
+        private async Task CheckExistingHiveCode(string hiveCode, Expression<Func<DbHive, bool>> predicate)
+        {
+            var dbHiveWithDuplicateCode = await _context.Hives.FirstOrDefaultAsync(predicate).ConfigureAwait(false);
+
+            if (dbHiveWithDuplicateCode != null)
+            {
+                throw new RequestedResourceHasConflictException($"The hive with code {hiveCode} already exists.");
+            }
         }
     }
 }
