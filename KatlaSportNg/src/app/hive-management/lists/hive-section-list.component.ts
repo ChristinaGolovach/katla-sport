@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HiveSectionListItem } from '../models/hive-section-list-item';
 import { HiveService } from '../services/hive.service';
 import { HiveSectionService} from '../services/hive-section.service';
+import { ErrorHandlerService } from '../services/error-handler.service';
 
 @Component({
   selector: 'app-hive-section-list',
@@ -18,7 +19,8 @@ export class HiveSectionListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private hiveService: HiveService,
-    private hiveSectionService: HiveSectionService
+    private hiveSectionService: HiveSectionService,
+    private errorService: ErrorHandlerService
   ) { }
 
   ngOnInit() {
@@ -38,6 +40,7 @@ export class HiveSectionListComponent implements OnInit {
 
   private setStatus(hiveSectionId: number, isDeleted: boolean){
     var hiveSection = this.hiveSections.find(s => s.id == hiveSectionId);
-    this.hiveSectionService.setHiveSectionStatus(hiveSectionId, isDeleted).subscribe(() => hiveSection.isDeleted = isDeleted, () => alert ("Sorry, error was occured. Try later."));
+    this.hiveSectionService.setHiveSectionStatus(hiveSectionId, isDeleted)
+                            .subscribe(() => hiveSection.isDeleted = isDeleted, error => alert(this.errorService.handleError(error)));
   }
 }
