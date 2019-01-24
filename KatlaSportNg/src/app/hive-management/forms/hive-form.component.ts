@@ -40,26 +40,31 @@ export class HiveFormComponent implements OnInit {
   onSubmit() {
     if (this.existed){
       this.hiveService.updateHive(this.hive)
-                      .subscribe(() => this.navigateToHives(), error => alert(this.errorService.handleError(error)))
+                      .subscribe(() => this.navigateToHives(), error => alert(this.errorService.handleError(error)));
     }
     else{
       this.hiveService.addHive(this.hive)
-                      .subscribe(() => this.navigateToHives(), error => alert(this.errorService.handleError(error)))
+                      .subscribe(() => this.navigateToHives(), error => alert(this.errorService.handleError(error)));
     }
   }
 
   onDelete() {
-    this.hiveService.setHiveStatus(this.hive.id, true)
-                    .subscribe(() => this.hive.isDeleted = true, error => alert(this.errorService.handleError(error)))
+    this.setStatus(true);
   }
 
   onUndelete() {
-    this.hiveService.setHiveStatus(this.hive.id, false)
-                    .subscribe(() => this.hive.isDeleted = false, error => alert(this.errorService.handleError(error)))
+   this.setStatus(false);
   }
 
   onPurge() {
-    this.hiveService.deleteHive(this.hive.id)
-                    .subscribe(() => {this.navigateToHives()}, error => alert(this.errorService.handleError(error)))
+    if (confirm("Are you sure to delete the hive - " + this.hive.name + " ?")){
+      this.hiveService.deleteHive(this.hive.id)
+                    .subscribe(() => {this.navigateToHives()}, error => alert(this.errorService.handleError(error)));
+    }
+  }
+
+  private setStatus(isDeleted: boolean ){
+    this.hiveService.setHiveStatus(this.hive.id, isDeleted)
+                    .subscribe(() => this.hive.isDeleted = isDeleted, error => alert(this.errorService.handleError(error)));
   }
 }
