@@ -46,7 +46,7 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task<Hive> GetHiveAsync(int hiveId)
         {
-            var dbHive = await GetExistingHive(hiveId).ConfigureAwait(false);
+            var dbHive = await GetExistingHiveAsync(hiveId).ConfigureAwait(false);
 
             return Mapper.Map<DbHive, Hive>(dbHive);
         }
@@ -54,7 +54,7 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task<Hive> CreateHiveAsync(UpdateHiveRequest createRequest)
         {
-            await CheckExistingHiveCode(createRequest.Code, h => h.Code == createRequest.Code).ConfigureAwait(false);
+            await CheckExistingHiveCodeAsync(createRequest.Code, h => h.Code == createRequest.Code).ConfigureAwait(false);
 
             var dbHive = Mapper.Map<UpdateHiveRequest, DbHive>(createRequest);
             dbHive.CreatedBy = _userContext.UserId;
@@ -69,9 +69,9 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task<Hive> UpdateHiveAsync(int hiveId, UpdateHiveRequest updateRequest)
         {
-            var dbHive = await GetExistingHive(hiveId).ConfigureAwait(false);
+            var dbHive = await GetExistingHiveAsync(hiveId).ConfigureAwait(false);
 
-            await CheckExistingHiveCode(updateRequest.Code, h => h.Code == updateRequest.Code && h.Id != hiveId).ConfigureAwait(false);
+            await CheckExistingHiveCodeAsync(updateRequest.Code, h => h.Code == updateRequest.Code && h.Id != hiveId).ConfigureAwait(false);
 
             Mapper.Map(updateRequest, dbHive);
             dbHive.LastUpdatedBy = _userContext.UserId;
@@ -84,7 +84,7 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task DeleteHiveAsync(int hiveId)
         {
-            var dbHive = await GetExistingHive(hiveId).ConfigureAwait(false);
+            var dbHive = await GetExistingHiveAsync(hiveId).ConfigureAwait(false);
 
             if (dbHive.IsDeleted == false)
             {
@@ -98,7 +98,7 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task SetStatusAsync(int hiveId, bool deletedStatus)
         {
-            var dbHive = await GetExistingHive(hiveId).ConfigureAwait(false);
+            var dbHive = await GetExistingHiveAsync(hiveId).ConfigureAwait(false);
 
             if (dbHive.IsDeleted != deletedStatus)
             {
@@ -109,7 +109,7 @@ namespace KatlaSport.Services.HiveManagement
             }
         }
 
-        private async Task<DbHive> GetExistingHive(int hiveId)
+        private async Task<DbHive> GetExistingHiveAsync(int hiveId)
         {
             var dbHive = await _context.Hives.FirstOrDefaultAsync(h => h.Id == hiveId).ConfigureAwait(false);
 
@@ -121,7 +121,7 @@ namespace KatlaSport.Services.HiveManagement
             return dbHive;
         }
 
-        private async Task CheckExistingHiveCode(string hiveCode, Expression<Func<DbHive, bool>> predicate)
+        private async Task CheckExistingHiveCodeAsync(string hiveCode, Expression<Func<DbHive, bool>> predicate)
         {
             var dbHiveWithDuplicateCode = await _context.Hives.FirstOrDefaultAsync(predicate).ConfigureAwait(false);
 

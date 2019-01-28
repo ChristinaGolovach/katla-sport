@@ -40,7 +40,7 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task<HiveSection> GetHiveSectionAsync(int hiveSectionId)
         {
-            var dbHiveSection = await GetExistingHiveSection(hiveSectionId).ConfigureAwait(false);
+            var dbHiveSection = await GetExistingHiveSectionAsync(hiveSectionId).ConfigureAwait(false);
 
             return Mapper.Map<DbHiveSection, HiveSection>(dbHiveSection);
         }
@@ -56,7 +56,7 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task<HiveSection> CreateHiveSectionAsync(UpdateHiveSectionRequest createRequest)
         {
-            await CheckExistingHiveSectionCode(createRequest.Code, s => s.Code == createRequest.Code).ConfigureAwait(false);
+            await CheckExistingHiveSectionCodeAsync(createRequest.Code, s => s.Code == createRequest.Code).ConfigureAwait(false);
 
             var dbHiveSection = Mapper.Map<UpdateHiveSectionRequest, DbHiveSection>(createRequest);
 
@@ -72,9 +72,9 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task<HiveSection> UpdateHiveSectionAsync(int hiveSectionId, UpdateHiveSectionRequest updateRequest)
         {
-            var dbHiveSection = await GetExistingHiveSection(hiveSectionId).ConfigureAwait(false);
+            var dbHiveSection = await GetExistingHiveSectionAsync(hiveSectionId).ConfigureAwait(false);
 
-            await CheckExistingHiveSectionCode(updateRequest.Code, s => s.Code == updateRequest.Code && s.Id != hiveSectionId).ConfigureAwait(false);
+            await CheckExistingHiveSectionCodeAsync(updateRequest.Code, s => s.Code == updateRequest.Code && s.Id != hiveSectionId).ConfigureAwait(false);
 
             dbHiveSection.LastUpdatedBy = _userContext.UserId;
 
@@ -86,7 +86,7 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task DeleteHiveSectionAsync(int hiveSectionId)
         {
-            var dbHiveSection = await GetExistingHiveSection(hiveSectionId).ConfigureAwait(false);
+            var dbHiveSection = await GetExistingHiveSectionAsync(hiveSectionId).ConfigureAwait(false);
 
             if (dbHiveSection.IsDeleted == false)
             {
@@ -100,7 +100,7 @@ namespace KatlaSport.Services.HiveManagement
         /// <inheritdoc/>
         public async Task SetStatusAsync(int hiveSectionId, bool deletedStatus)
         {
-            var dbHiveSection = await GetExistingHiveSection(hiveSectionId).ConfigureAwait(false);
+            var dbHiveSection = await GetExistingHiveSectionAsync(hiveSectionId).ConfigureAwait(false);
 
             if (dbHiveSection.IsDeleted != deletedStatus)
             {
@@ -111,7 +111,7 @@ namespace KatlaSport.Services.HiveManagement
             }
         }
 
-        private async Task<DbHiveSection> GetExistingHiveSection(int hiveSectionId)
+        private async Task<DbHiveSection> GetExistingHiveSectionAsync(int hiveSectionId)
         {
             var dbHiveSection = await _context.Sections.FirstOrDefaultAsync(s => s.Id == hiveSectionId).ConfigureAwait(false);
 
@@ -123,7 +123,7 @@ namespace KatlaSport.Services.HiveManagement
             return dbHiveSection;
         }
 
-        private async Task CheckExistingHiveSectionCode(string sectionCode, Expression<Func<DbHiveSection, bool>> predicate)
+        private async Task CheckExistingHiveSectionCodeAsync(string sectionCode, Expression<Func<DbHiveSection, bool>> predicate)
         {
             var dbHiveSectionWithDuplicateCode = await _context.Sections.FirstOrDefaultAsync(predicate).ConfigureAwait(false);
 
